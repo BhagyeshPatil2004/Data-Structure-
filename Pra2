@@ -1,0 +1,150 @@
+//1. Write a program to read an integer 1D array containing 8 bits (0s, 1s) of an unsigned binary integer. The program should print the decimal value for the integer.
+
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+   char binary[8];
+
+   printf("Enter an 8-bit binary number: ");
+   for (int i = 0; i < 8; ++i) {
+       scanf(" %c", &binary[i]);  // Read with leading space to consume newline
+       if (binary[i] != '0' && binary[i] != '1') {
+           printf("Invalid input. Enter only '0's and '1's.\n");
+           return 1;
+       }
+   }
+
+   int decimal = 0;
+   for (int i = 7; i >= 0; --i) {
+       decimal += (binary[i] - '0') * pow(2, 7 - i);  // Calculate decimal value
+   }
+
+   printf("Decimal value: %d\n", decimal);
+
+   return 0;
+}
+
+
+// 2.      Currency notes are available in the following seven denominations: Rs. 1, Rs. 2, Rs. 5, Rs. 10, Rs. 20, Rs.50, and Rs. 100.You will first read 
+an integer array (named purse [7]) of seven elements, where the array elements represents the number of notes of each denomination (in increasing order of
+denomination) available with you. You are also given an amount of money to be paid using these notes. The amount will be less than Rs. 1000. You have to pay
+the amount using minimum number of notes. Print the number of notes of each denomination which you will use to pay the amount. If the amount cannot be paid
+using the available notes, print “Failed to Pay”.
+
+#include <stdio.h>
+
+int main() {
+   int purse[7];
+
+   printf("Enter the number of notes for each denomination (Rs. 1 to Rs. 100):\n");
+   for (int i = 0; i < 7; ++i) {
+       printf("Enter the number of Rs. %d notes: ", i + 1);
+       scanf("%d", &purse[i]);
+   }
+
+   int amount;
+   printf("Enter the amount to be paid (less than Rs. 1000): ");
+   scanf("%d", &amount);
+
+   printf("Minimum number of notes to pay Rs. %d:\n", amount);
+
+   int totalNotes = 0;
+   for (int i = 6; i >= 0; --i) {
+       int notesUsed = amount / (i + 1);  // Calculate notes based on denomination
+       if (notesUsed > purse[i]) {  // Ensure availability in purse
+           notesUsed = purse[i];
+       }
+       amount -= notesUsed * (i + 1);  // Update remaining amount
+       totalNotes += notesUsed;
+
+       if (notesUsed > 0) {
+           printf("Rs. %d notes: %d\n", i + 1, notesUsed);
+       }
+   }
+
+   if (amount > 0) {
+       printf("Failed to Pay\n");
+   }
+
+   return 0;
+}
+
+
+// 3.Write functions to perform the following operations with two-dimensional arrays.
+    i) Reading any two dimensional array elements.
+    ii) Finding maximum and standard deviation of array elements.
+    iii) Printing the transpose of a matrix
+
+#include <stdio.h>
+#include <math.h>
+
+#define MAX_ROWS 100
+#define MAX_COLS 100
+
+void readArray(int arr[MAX_ROWS][MAX_COLS], int rows, int cols) {
+    printf("Enter elements of the array:\n");
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            printf("Enter element at position (%d, %d): ", i, j);
+            scanf("%d", &arr[i][j]);
+        }
+    }
+}
+
+int findMax(int arr[MAX_ROWS][MAX_COLS], int rows, int cols) {
+    int maxElement = arr[0][0];
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            if (arr[i][j] > maxElement) {
+                maxElement = arr[i][j];
+            }
+        }
+    }
+    return maxElement;
+}
+
+double calculateStdDev(int arr[MAX_ROWS][MAX_COLS], int rows, int cols) {
+    double sum = 0.0;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            sum += arr[i][j];
+        }
+    }
+    double mean = sum / (rows * cols);
+    double stddev = 0.0;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            stddev += pow(arr[i][j] - mean, 2);
+        }
+    }
+    return sqrt(stddev / (rows * cols));
+}
+
+void printTranspose(int arr[MAX_ROWS][MAX_COLS], int rows, int cols) {
+    printf("Transpose of the matrix:\n");
+    for (int j = 0; j < cols; ++j) {
+        for (int i = 0; i < rows; ++i) {
+            printf("%d ", arr[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int rows, cols;
+    printf("Enter the number of rows and columns for the array: ");
+    scanf("%d %d", &rows, &cols);
+    if (rows > MAX_ROWS || cols > MAX_COLS) {
+        printf("Error: Exceeded maximum array size.\n");
+        return 1;
+    }
+    int array[MAX_ROWS][MAX_COLS];
+    readArray(array, rows, cols);
+    int maxElement = findMax(array, rows, cols);
+    double stddev = calculateStdDev(array, rows, cols);
+    printf("Maximum element: %d\n", maxElement);
+    printf("Standard Deviation: %.6lf\n", stddev);  // Print with 6 decimal places
+    printTranspose(array, rows, cols);
+    return 0;
+}
