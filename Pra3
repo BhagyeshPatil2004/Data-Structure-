@@ -1,0 +1,74 @@
+1.Given two strings S1 and S2, write a program to print the number of times the first string S1 appears in the second string S2 as a substring. 
+For example if S1 is “atg” and S2 is “batgccatgatatga”, then the program should print 3. Program should work correctly
+for all possible inputs. DO NOT use any of the library functions defined under strings described above.
+
+#include <stdio.h>
+int countSubstringOccurrences(char S1[], char S2[]) {
+    int i, j, k, count = 0, M = strlen(S1), N = strlen(S2);
+
+    for (i = 0; i <= N - M; i++) {
+        for (j = 0; j < M; j++) {
+            if (S2[i + j] != S1[j]) {
+                break;
+            }
+        }
+        if (j == M) {
+            count++;
+        }
+    }
+    return count;
+}
+int main() {
+    char S1[100], S2[100];
+    printf("Enter the first string S1: ");
+    scanf("%s", S1);
+    printf("Enter the second string S2: ");
+    scanf("%s", S2);
+    int occurrences = countSubstringOccurrences(S1, S2);
+    printf("S1 appears as a substring in S2 %d times.\n", occurrences);
+    return 0;
+}
+
+2.The absolute distance between two integers x1 and x2 is given by | x2 – x1 |. Write a function which sorts an array x[ ] of n integers in ascending order of their absolute distances with a given number z. For example, given x[ ] = {9, 1, 12, 4, 2} and z = 6, the sorted array will be x[ ] = {4, 9, 2, 1, 12}. Note that 4 is closest to 6, and 12 is farthest from 6, in terms of absolute distances. The function will
+have the following prototype:
+void dist_sort( int x[ ], int n, int z ) ;
+Specify the time and space complexity in the report
+
+
+#include <stdio.h>
+void dist_sort(int x[], int n, int z) {
+    int i, j, temp;
+
+    // Bubble sort based on absolute distance from z
+    for (i = 0; i < n - 1; i++) {
+        for (j = 0; j < n - i - 1; j++) {
+            if (abs(x[j] - z) > abs(x[j + 1] - z)) {
+                // Swap elements
+                temp = x[j];
+                x[j] = x[j + 1];
+                x[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int main() {
+    int x[] = {9, 1, 12, 4, 2};
+    int n = sizeof(x) / sizeof(x[0]);
+    int z = 6;
+
+    printf("Original array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", x[i]);
+    }
+
+    dist_sort(x, n, z);
+
+    printf("\nSorted array: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", x[i]);
+    }
+
+    return 0;
+}
+
